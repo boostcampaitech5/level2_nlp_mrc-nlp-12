@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "odqa"
+version = "0.1.0"
+description = "Open-Domain Question Anwering"
+authors = ["Jihye Mun <munjh1121@gmail.com>", "Gyeongtaek Bahk <afterthougt@gmail.com>", "Jieun Park <imhappyhill@gmail.com>", "Inseo Song <songinseo0910@gmail.com>", "Jihwan Yoon <yjh091500@naver.com>"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+accelerate = "^0.21.0"
+datasets = "2.12.0"
+evaluate = "^0.4.0"
+faiss-gpu = "^1.7.2"
+huggingface-hub = "^0.16.4"
+numpy = "^1.25.2"
+pandas = "^2.0.3"
+python = "^3.9"
+rank-bm25 = "^0.2.2"
+scikit-learn = "^1.3.0"
+torch = { url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp39-cp39-linux_x86_64.whl" }
+tqdm = "^4.65.0"
+transformers = "4.29.2"
+omegaconf = "^2.3.0"
+wandb = "^0.15.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
