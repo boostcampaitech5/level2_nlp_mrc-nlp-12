@@ -25,3 +25,7 @@ tfidf_embedding.bin
 tfidv.bin
 tfidf.bin
 faiss_clusters*
+
+build/
+dist/
+*.egg-info/
