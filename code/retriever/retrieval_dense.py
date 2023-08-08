@@ -151,13 +151,11 @@ class FaissRetrieval:
             dict.fromkeys([v['text'] for v in wiki.values()])
         )
 
-        neat_logger(f'Type of query_or_dataset: {type(query_or_dataset)}')
-
         if isinstance(query_or_dataset, str):
             neat_logger('[Exhaustive search to query using dense passage retrieval (DPR)]\n{query_or_dataset}')
             input_query = tokenizer(
                 query_or_dataset, padding='max_length', truncation=True, return_tensors='pt'
-            ).to(device)
+            )
 
             with torch.no_grad():
                 output_query = q_encoder(**input_query).to('cpu').numpy()
@@ -170,10 +168,11 @@ class FaissRetrieval:
                 )
             return (doc_scores, [contexts[doc_indices[i]] for i in range(top_k)])
 
-        elif isinstance(query_or_dataset, Dataset):
+        elif isinstance(query_or_dataset, TensorDataset) or isinstance(query_or_dataset, Dataset):
             input_queries = query_or_dataset['question']
             input_queries = tokenizer(
-                input_queries, padding='max_length', truncation=True, return_tensors='pt').to(device)
+                input_queries, padding='max_length', truncation=True, return_tensors='pt'
+            )
 
             with torch.no_grad():
                 q_encoder.eval()
@@ -194,7 +193,7 @@ class FaissRetrieval:
                     tmp['original_context'] = row['context']
                     tmp['answers'] = row['answers']
 
-                neat_logger(f'Given: {row}\n\n Inferred result: {tmp}')
+                # neat_logger(f'Given: {row}\n\n Inferred result: {tmp}')
 
                 total.append(tmp)
             return pd.DataFrame(total)
@@ -353,7 +352,7 @@ def main():
         neat_logger('Indexer file or context embedding file have been detected.')
 
     # Faiss index 파일을 만들고 저장합니다.
-    neat_logger('Building Faiss retriever..')
+    neat_logger('Defininng Faiss retriever..')
     retriever = FaissRetrieval(
         ctx_embeddings_path=retriever_args.dpr_ctx_embeddings_path,
         indexer_path=indexer_path
@@ -378,10 +377,11 @@ def main():
 
     neat_logger('Examining a sample case..')
     # query = '금강산의 겨울 이름은?'
-    query = '창씨개명령의 시행일을 미루는 것을 수락한 인물은?'
+    question = '왕페이의 조부는?'
+    neat_logger(f'Question: {question}')
 
     doc_tuple = retriever.retrieve(
-        query,
+        question,
         context_path=data_args.context_path,
         tokenizer=tokenizer,
         q_encoder=q_encoder,
@@ -390,7 +390,7 @@ def main():
     neat_logger(doc_tuple)
     neat_logger(f'Doc scores\n{doc_tuple[0]}')
     neat_logger(f'Docs\n{doc_tuple[1]}')
-    neat_logger('ended')
+    neat_logger('Dense retrieval test has been ended.')
 
 
 if __name__ == '__main__':

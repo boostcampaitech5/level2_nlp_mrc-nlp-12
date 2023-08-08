@@ -25,6 +25,7 @@ tfidf_embedding.bin
 tfidv.bin
 tfidf.bin
 faiss_clusters*
+passage_embeddings.bin
 
 build/
 dist/
