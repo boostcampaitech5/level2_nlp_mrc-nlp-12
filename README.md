@@ -1,4 +1,4 @@
-# Open-Domain Question Answering
+# 오픈 도메인 질의응답 Open-Domain Question Answering
  주어진 지문을 이해하고, 주어진 질의의 답변을 추론하는 태스크
 
 ## 일정 Schedule
@@ -17,15 +17,15 @@
 |[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/jihye-moon)](https://github.com/jihye-moon)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/afterthougt)](https://github.com/afterthougt)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/iamzieun)](https://github.com/iamzieun)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/fortunetiger)](https://github.com/fortunetiger)|[![GitHub Badge](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/ohilikeit)](https://github.com/ohilikeit)|
 
 
-## 랩업리포트 Wrap-up Report
-```code/assets/MRC_NLP_팀 리포트(12조).pdf```
+## 랩업 리포트 Wrap-up Report
+[랩업 리포트](https://github.com/boostcampaitech5/level2_nlp_mrc-nlp-12/tree/main/assets/MRC_NLP_%ED%8C%80%20%EB%A6%AC%ED%8F%AC%ED%8A%B8(12%EC%A1%B0).pdf)
 
 ## 저장소 구조 Repository Structure
 ```
 level2_nlp_mrc-nlp-12/
+├── assets/
 │
 ├── code/
-│   ├── assets/
 │   │
 │   ├── eda/
 │   │   ├── eda.ipynb
@@ -36,8 +36,14 @@ level2_nlp_mrc-nlp-12/
 │   │   └── install_requirements.sh
 │   │
 │   ├── retriever/                              # Retiever 실험 코드 모음
+│   │   ├── dpr/
+│   │   │   ├── data_loaders.py                 # Dense retriever 학습을 위한 dataloader
+│   │   │   ├── model.py                        # Dense retriever 학습을 위한 encoder
+│   │   │   └── trainer.py                      # Dense retriever trainer
+│   │   │
 │   │   ├── elastic_setting.json                # retrieval_elastic.py를 위한 설정 파일
 │   │   ├── retrieval_bm25.py                   # BM25 실험
+│   │   ├── retrieval_dense.py                  # DPR 실험
 │   │   ├── retrieval_elastic.py                # elastic search 적용 코드
 │   │   ├── retrieval_faiss.py                  # FAISS 적용 코드
 │   │   └── retrieval_tfidf.py                  # TFIDF 실험 코드
@@ -49,25 +55,25 @@ level2_nlp_mrc-nlp-12/
 │   │   ├── evalutaion.py
 │   │   └── utils_qa.py
 │   │
-│   ├── arguments.py
+│   ├── arguments.py                            # 모델 설정, 학습 설정, 데이터 설정 등
 │   ├── inference.py                            # ODQA 모델 평가 또는 제출 파일 (predictions.json) 생성
 │   ├── inference.sh                            # inference.py를 실행하기 위한 스크립트
 │   ├── load_data.py                            # 데이터셋을 정의하고 DatasetDict를 반환하는 스크립트
 │   ├── run.sh                                  # train.py를 실행하기 위한 스크립트
 │   ├── run_mrc.py
-│   ├── train.py				# MRC, Retrieval 모델 학습 및 평가
-│   └── README.md				# ODQA 모델 평가 또는 제출 파일 (predictions.json) 생성
+│   ├── train.py                                # MRC, Retrieval 모델 학습 및 평가
+│   └── README.md                               # ODQA 모델 평가 또는 제출 파일 (predictions.json) 생성
 │
 ├── data/
 │   ├── retrieved_context_dataset/              # retrieval에 사용되는 corpus
 │   │   ├── train_3.csv
 │   │   └── valid_3.csv
 │   │
-│   ├── test_dataset/                           # MRC 모델 학습에 사용되는 데이터
+│   ├── test_dataset/                           # MRC 모델 평가 시 사용되는 데이터
 │   │   ├── validation/
 │   │   └── dataset_dict.json
 │   │
-│   └── train_dataset/                          # MRC 모델 학습에 사용되는 데이터
+│   └── train_dataset/                          # MRC 모델 학습 시 사용되는 데이터
 │       ├── trian/
 │       ├── validation/
 │       └── dataset_dict.json
@@ -76,14 +82,20 @@ level2_nlp_mrc-nlp-12/
 ```
 
 ## 사용법 Usage
-### train
+### 학습 train
 ```bash
 $ ./code/run.sh
 ```
 
-### inference
+### 추론 inference
 ```bash
 $ ./code/inference.sh
+```
+
+### DPR 학습 및 추론
+`code/` 디렉토리에서,
+```bash
+python retriever/retrieval_dense.py
 ```
 
 
@@ -96,7 +108,7 @@ $ ./code/inference.sh
     - 리더보드에 반영되지 않는 참고용 점수
     - 예측한 답과 ground-truth 사이의 token overlap을 f1으로 계산
 
-## 대회 결과
+## 대회 결과 Competition Result
 |리더보드|순위|EM|F1|
 |:---:|:---:|:---:|:---:|
 |Public|8|68.33|78.57|
