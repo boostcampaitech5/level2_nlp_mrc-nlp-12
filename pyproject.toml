@@ -22,6 +22,7 @@ tqdm = "^4.65.0"
 transformers = "4.29.2"
 omegaconf = "^2.3.0"
 wandb = "^0.15.8"
+elasticsearch = "^8.9.0"
 
 
 [build-system]
